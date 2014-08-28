@@ -36,10 +36,13 @@ public class Configuration extends Properties {
 	
 	public static final String DISCOVERY_USE_DNS = "discovery.dns.enabled";
 
+	public static final String PERSIST_PRESENCE_DATA = "users.presence.persist";
+	
 	public static final String NOTIFICATIONS_SENDTO = "notifications.sendTo";
 	public static final String NOTIFICATIONS_CONNECTED = "notifications.connected";
 	
 	private static final String CONFIGURATION_FILE = "configuration.properties";
+
 
 	private static Configuration instance = null;
 
@@ -64,7 +67,6 @@ public class Configuration extends Properties {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Could not load " + CONFIGURATION_FILE + "!");
-			System.out.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
 	}
