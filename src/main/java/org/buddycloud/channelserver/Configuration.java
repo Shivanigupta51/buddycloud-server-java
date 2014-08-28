@@ -43,6 +43,11 @@ public class Configuration extends Properties {
 	
 	private static final String CONFIGURATION_FILE = "configuration.properties";
 
+        public static final String PURGE_REMOTE_ON_START = "sync.purge-on-start";
+
+	public static final String XMPP_PORT = "xmpp.port";
+
+	public static final String XMPP_HOST = "xmpp.host";
 
 	private static Configuration instance = null;
 
@@ -94,6 +99,10 @@ public class Configuration extends Properties {
 	public String getProperty(String key) {
 		return conf.getProperty(key);
 	}
+    
+    public void clear() {
+        conf.clear();
+    }
 
 	public String getProperty(String key, String defaultValue) {
 		return conf.getProperty(key, defaultValue);
@@ -115,12 +124,17 @@ public class Configuration extends Properties {
 	}
 
 	private Collection<JID> getJIDArrayProperty(String key) {
+        System.out.println(conf.getProperty(CONFIGURATION_CHANNELS_AUTOSUBSCRIBE));
 		Collection<String> props = getStringArrayProperty(key);
 
 		Collection<JID> jids = new ArrayList<JID>(props.size());
 
 		for (String prop : props) {
-			jids.add(new JID(prop));
+            try {
+			    jids.add(new JID(prop));
+            } catch (IllegalArgumentException e) {
+                LOGGER.error(e);
+            }
 		}
 
 		return jids;
@@ -172,5 +186,13 @@ public class Configuration extends Properties {
 		}
 
 		return defaultValue;
+	}
+
+        public String getComponentPort() {
+		return this.getProperty(XMPP_PORT, "5347");
+	}
+
+	public String getXmppHost() {
+		return this.getProperty(XMPP_HOST, "127.0.0.1");
 	}
 }
